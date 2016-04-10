@@ -1,0 +1,54 @@
+---
+
+- include: redhat-epel.yml
+
+- name: yum | observium dependencies install
+  yum: name={{item}} state=present update_cache=yes
+  with_items:
+    - wget
+    - httpd
+    - php
+    - php-mysql
+    - php-gd
+    - php-posix
+    - php-mcrypt
+    - php-pear.noarch
+    - cronie
+    - net-snmp
+    - net-snmp-utils
+    - fping
+    - mariadb-server
+    - mariadb
+    - MySQL-python
+    - rrdtool
+    - subversion
+    - jwhois
+    - ipmitool
+    - graphviz
+    - ImageMagick
+    - php-mcrypt
+    - setroubleshoot-server
+
+- set_fact:
+    nginx_conf: /etc/nginx/conf.d
+    supervisor_confdir: /etc/supervisord.d
+    supervisor_targetconf: mig.ini
+    supervisor_service: supervisord
+    cron_svc: crond
+
+- name: Redhat | Ensure cron is running and enabled on boot.
+  service: name="{{ cron_svc }}" state=started enabled=yes
+- name: Redhat | Ensure Mysql/Mariadb is running and enabled on boot.
+  service: name=mariadb state=started enabled=yes
+- name: Redhat | Ensure HTTPD is running and enabled on boot.
+  service: name=httpd state=started enabled=yes
+
+- name: disable selinux (observium recommendation...)
+  selinux: state=disabled
+
+- name: Check apache listening interface
+#  lineinfile: dest=/etc/httpd/conf/httpd.conf line="Listen {{ observium_vhostport }}" follow=yes validate='/usr/sbin/apache2ctl -f %s -t' backup=yes insertafter="^Listen 80"
+  lineinfile: dest=/etc/httpd/conf/httpd.conf line="Listen {{ observium_vhostport }}" follow=yes backup=yes insertafter="^Listen 80"
+  notify:
+    - restart apache
+

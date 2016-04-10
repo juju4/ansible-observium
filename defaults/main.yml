@@ -1,0 +1,18 @@
+---
+
+observium_rootdir: /opt/observium
+observium_db: observium
+observium_dbuser: observiumuser
+observium_dbpass: observiumpass
+observium_vhostport: 8888
+
+## user, password, level
+observium_userlist:
+    - { u: o1, p: o1pass, l: 10 }
+
+## hostname, community, snmpversion
+observium_devicelist:
+    - { d: hostname, c: public, v: v2c }
+
+observium_do_discovery: false
+

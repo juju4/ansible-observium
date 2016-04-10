@@ -1,0 +1,106 @@
+---
+## http://www.observium.org/docs/install_debian/
+## http://www.observium.org/docs/install_rhel7/
+
+- include: apache-env.yml
+
+- include: debian.yml
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- include: redhat.yml
+  when: ansible_os_family == "RedHat" or ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+- name: create observium root dir
+  file: dest="{{ observium_rootdir }}" state=directory mode=0755
+
+- name: download observium
+  get_url: url=http://www.observium.org/observium-community-latest.tar.gz dest=/opt/observium-community-latest.tar.gz mode=0644
+
+## FIXME! archive contains a dir...
+- name: extract observium
+  unarchive: src=/opt/observium-community-latest.tar.gz dest="{{ observium_rootdir }}/../" copy=no
+
+- stat: path="{{ observium_rootdir }}/config.php"
+  register: conf
+- name: create observium config
+  command: "rsync -ci {{ observium_rootdir }}/config.php.default {{ observium_rootdir }}/config.php"
+  register: rsync_result
+  changed_when: 'rsync_result.stdout != ""'
+  when: not conf.stat.exists
+
+- name: update config file settings
+  replace: dest="{{ observium_rootdir }}/config.php" regexp="{{ item.re }}" replace="{{ item.rep }}"
+  with_items:
+    - { re: "$config['db_host'] = '.*';", rep: "$config['db_host'] = 'localhost';" }
+    - { re: "$config['db_user'] = '.*';", rep: "$config['db_user'] = '{{ observium_dbuser }}';" }
+    - { re: "$config['db_pass'] = '.*';", rep: "$config['db_pass'] = '{{ observium_dbpass }}';" }
+    - { re: "$config['db_name'] = '.*';", rep: "$config['db_name'] = '{{ observium_db }}';" }
+
+- name: update fping location in config file
+  lineinfile: dest="{{ observium_rootdir }}/config.php" line="$config['fping'] = \"/sbin/fping\";"
+  when: ansible_os_family == "RedHat" or ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+- name: create observium mysql db
+  mysql_db: "name={{ observium_db }} state=present encoding=utf8"
+- name: create observium mysql db user
+  mysql_user: "name={{ observium_dbuser }} password={{ observium_dbpass }} priv={{ observium_db }}.*:ALL state=present"
+
+- name: configure mysql schema
+  command: "{{ observium_rootdir }}//discovery.php -u"
+
+- name: create observium logs dir
+  file: dest="{{ observium_rootdir }}/logs" state=directory mode=0755
+- name: create observium rrd dir
+  file: dest="{{ observium_rootdir }}/rrd" state=directory mode=0755 owner="{{ www_user }}" group="{{ www_user }}"
+
+- name: Enable php module mcrypt
+  command: "php5enmod mcrypt"
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+- name: Enable apache rewrite module
+  apache2_module: state=present name=rewrite
+  notify:
+    - restart apache
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+- name: setup observium as apache virtualhost
+  template: "src=observium-apache24.conf dest={{ apache_sitedir }}/observium.conf"
+- name: apt | enable apache config
+  file: "src={{ apache_sitedir }}/observium.conf dest=/etc/apache2/sites-enabled/observium.conf state=link"
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  notify:
+    - restart apache
+
+- name: configure observium users
+  command: "{{ observium_rootdir }}/adduser.php {{ item.u }} {{ item.p }} {{ item.l }}"
+  with_items: "{{ observium_userlist }}"
+
+- name: configure observium devices
+  command: "{{ observium_rootdir }}/add_device.php {{ item.d }} {{ item.c }} {{ item.v }}"
+  with_items: "{{ observium_devicelist }}"
+
+- name: Initial Discovery
+  command: "{{ observium_rootdir }}/discovery.php -h all"
+  when: observium_do_discovery is defined and observium_do_discovery
+- name: Initial Poll
+  command: "{{ observium_rootdir }}/poller.php -h all"
+  when: observium_do_discovery is defined and observium_do_discovery
+
+- name: configure cron tasks - discovery
+  cron: name="observium-discovery" minute=33 hour="*/6"
+        user="root" job="/opt/observium/discovery.php -h all >> /dev/null 2>&1"
+        cron_file=ansible_observium-discovery
+  notify:
+    - reload cron
+- name: configure cron tasks - discovery new
+  cron: name="observium-discovery-new" minute="*/5"
+        user="root" job="/opt/observium/discovery.php -h new >> /dev/null 2>&1"
+        cron_file=ansible_observium-discovery-new
+  notify:
+    - reload cron
+- name: configure cron tasks - poller
+  cron: name="observium-poller" minute="*/5"
+        user="root" job="/opt/observium/poller-wrapper.py 2 >> /dev/null 2>&1"
+        cron_file=ansible_observium-poller
+  notify:
+    - reload cron
+
+

@@ -1,0 +1,7 @@
+---
+
+- name: restart apache
+  service: name={{ apache_svc }} state=restarted
+- name: reload cron
+  service: name=cron state=restarted
+
