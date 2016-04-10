@@ -5,7 +5,7 @@ python: "2.7"
 before_install:
  - sudo apt-get update -qq
  - sudo apt-get install -qq python-apt python-pycurl
- - ln -s ansible-myrole ../myrole
+ - ln -s ansible-observium ../observium
 install:
   - pip install ansible
   - ansible --version
@@ -21,9 +21,4 @@ script:
 
 # Run the role/playbook again, checking to make sure it's idempotent.
   - "ansible-playbook -i inventory test/integration/default/default.yml --connection=local --sudo | tee /tmp/idempotency.log | grep -q 'changed=0.*failed=0'  && (echo 'Idempotence test: pass' && exit 0)  || (echo 'Idempotence test: fail' && exit 1)"
-#  - >
-#  ansible-playbook -i inventory test/integration/default/default.yml --connection=local --sudo
-#  | grep -q 'changed=0.*failed=0'
-#  && (echo 'Idempotence test: pass' && exit 0)
-#  || (echo 'Idempotence test: fail' && exit 1)
 

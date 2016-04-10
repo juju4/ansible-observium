@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/juju4/ansible-observium.svg?branch=master)](https://travis-ci.org/juju4/ansible-observium)
 # Observium ansible role
 
 A simple ansible role to setup observium community
