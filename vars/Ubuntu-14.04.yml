@@ -1,0 +1,35 @@
+---
+
+observium_pkg:
+    - libapache2-mod-php5
+    - php5-cli
+    - php5-mysql
+    - php5-gd
+    - php5-mcrypt
+    - php5-json
+    - php-pear
+    - snmp
+    - fping
+    - mysql-server
+    - mysql-client
+    - python-mysqldb
+    - rrdtool
+    - subversion
+    - whois
+    - mtr-tiny
+    - ipmitool
+    - graphviz
+    - imagemagick
+
+nginx_conf: /etc/nginx/sites-available
+cron_svc: cron
+
+www_user: www-data
+apache_svc: apache2
+apache_confdir: /etc/apache2/conf-available
+apache_sitedir: /etc/apache2/sites-available
+apachesslconf: /etc/apache2/sites-enabled/default-ssl.conf
+apache_logdir: /var/log/apache2
+modsecurity_conf: /etc/modsecurity/modsecurity.conf
+modsecurity_active: /usr/share/modsecurity-crs/activated_rules
+phpenmod: php5enmod

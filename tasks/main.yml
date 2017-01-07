@@ -2,7 +2,12 @@
 ## http://www.observium.org/docs/install_debian/
 ## http://www.observium.org/docs/install_rhel7/
 
-- include: apache-env.yml
+- name: Include version-specific variables for Ubuntu.
+  include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml"
+  when: ansible_distribution == 'Ubuntu'
+- name: Include version-specific variables for RedHat
+  include_vars: "RedHat-{{ ansible_distribution_version.split('.')[0] }}.yml"
+  when: ansible_os_family == "RedHat" or ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
 - include: debian.yml
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
@@ -54,7 +59,7 @@
   file: dest="{{ observium_rootdir }}/rrd" state=directory mode=0755 owner="{{ www_user }}" group="{{ www_user }}"
 
 - name: Enable php module mcrypt
-  command: "php5enmod mcrypt"
+  command: "{{ phpenmod }} mcrypt"
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 - name: Enable apache rewrite module
   apache2_module: state=present name=rewrite

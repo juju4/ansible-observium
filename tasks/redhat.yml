@@ -1,40 +1,8 @@
 ---
 
-- include: redhat-epel.yml
-
 - name: yum | observium dependencies install
   yum: name={{item}} state=present update_cache=yes
-  with_items:
-    - wget
-    - httpd
-    - php
-    - php-mysql
-    - php-gd
-    - php-posix
-    - php-mcrypt
-    - php-pear.noarch
-    - cronie
-    - net-snmp
-    - net-snmp-utils
-    - fping
-    - mariadb-server
-    - mariadb
-    - MySQL-python
-    - rrdtool
-    - subversion
-    - jwhois
-    - ipmitool
-    - graphviz
-    - ImageMagick
-    - php-mcrypt
-    - setroubleshoot-server
-
-- set_fact:
-    nginx_conf: /etc/nginx/conf.d
-    supervisor_confdir: /etc/supervisord.d
-    supervisor_targetconf: mig.ini
-    supervisor_service: supervisord
-    cron_svc: crond
+  with_items: "{{ observium_pkg }}"
 
 - name: Redhat | Ensure cron is running and enabled on boot.
   service: name="{{ cron_svc }}" state=started enabled=yes

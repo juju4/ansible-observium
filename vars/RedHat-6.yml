@@ -1,0 +1,39 @@
+---
+
+observium_pkg:
+    - wget
+    - httpd
+    - php
+    - php-mysql
+    - php-gd
+    - php-posix
+    - php-mcrypt
+    - php-pear.noarch
+    - cronie
+    - net-snmp
+    - net-snmp-utils
+    - fping
+    - mariadb-server
+    - mariadb
+    - MySQL-python
+    - rrdtool
+    - subversion
+    - jwhois
+    - ipmitool
+    - graphviz
+    - ImageMagick
+    - php-mcrypt
+    - setroubleshoot-server
+
+nginx_conf: /etc/nginx/conf.d
+cron_svc: crond
+
+www_user: apache
+apache_svc: httpd
+apache_confdir: /etc/httpd/conf.d
+apache_sitedir: /etc/httpd/conf.d
+apachesslconf: /etc/apache2/sites-enabled/default-ssl.conf
+apache_logdir: /var/log/httpd
+modsecurity_conf: /etc/httpd/conf.d/mod_security.conf
+modsecurity_active: /etc/httpd/modsecurity.d/activated_rules
+
