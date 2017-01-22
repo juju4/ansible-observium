@@ -24,6 +24,8 @@ observium_pkg:
     - ImageMagick
     - php-mcrypt
     - setroubleshoot-server
+    - libselinux-python
+    - selinux-policy
 
 nginx_conf: /etc/nginx/conf.d
 cron_svc: crond

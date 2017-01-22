@@ -4,6 +4,9 @@
   apt: name={{item}} state=present update_cache=yes
   with_items: "{{ observium_pkg }}"
 
+- name: debian | Ensure Mysql is running and enabled on boot.
+  service: name=mysql state=started enabled=yes
+
 - name: Check apache listening interface - ports.conf
   lineinfile: dest=/etc/apache2/ports.conf line="Listen {{ observium_vhostport }}" backup=yes
   notify:
