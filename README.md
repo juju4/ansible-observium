@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/juju4/ansible-observium.svg?branch=master)](https://travis-ci.org/juju4/ansible-observium)
+[![Build Status - Master](https://travis-ci.org/juju4/ansible-observium.svg?branch=master)](https://travis-ci.org/juju4/ansible-observium)
+[![Build Status - Devel](https://travis-ci.org/juju4/ansible-observium.svg?branch=devel)](https://travis-ci.org/juju4/ansible-observium/branches)
 # Observium ansible role
 
 A simple ansible role to setup observium community
@@ -10,6 +11,7 @@ http://www.observium.org/
 It was tested on the following versions:
  * 1.9
  * 2.0
+ * 2.2
 
 ### Operating systems
 
@@ -23,7 +25,7 @@ For example
 ```
 - host: all
   roles:
-    - observium
+    - juju4.observium
 ```
 
 Currently works with recommended setup including mysql, apache2
@@ -38,13 +40,13 @@ This role has a travis basic test (for github), more advanced with kitchen and a
 
 Once you ensured all necessary roles are present, You can test with:
 ```
-$ cd /path/to/roles/observium
+$ cd /path/to/roles/juju4.observium
 $ kitchen verify
 $ kitchen login
 ```
 or
 ```
-$ cd /path/to/roles/observium/test/vagrant
+$ cd /path/to/roles/juju4.observium/test/vagrant
 $ vagrant up
 $ vagrant ssh
 ```
