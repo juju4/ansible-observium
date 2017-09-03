@@ -2,5 +2,5 @@
 
 - hosts: all
   roles:
-    - observium
+    - juju4.observium
 
