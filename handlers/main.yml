@@ -2,6 +2,9 @@
 
 - name: restart apache
   service: name={{ apache_svc }} state=restarted
+#  when: not (ansible_virtualization_type is defined and ansible_virtualization_type == "docker")
+
 - name: reload cron
   service: name={{ cron_svc }} state=restarted
+  when: not (ansible_virtualization_type is defined and ansible_virtualization_type == "docker")
 

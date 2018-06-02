@@ -28,9 +28,10 @@
 - stat: path="{{ observium_rootdir }}/config.php"
   register: conf
 - name: create observium config
-  command: "rsync -ci {{ observium_rootdir }}/config.php.default {{ observium_rootdir }}/config.php"
-  register: rsync_result
-  changed_when: 'rsync_result.stdout != ""'
+  copy:
+    src: "{{ observium_rootdir }}/config.php.default"
+    dest: "{{ observium_rootdir }}/config.php"
+    remote_src: true
   when: not conf.stat.exists
 
 - name: update config file settings
@@ -44,6 +45,22 @@
 - name: update fping location in config file
   lineinfile: dest="{{ observium_rootdir }}/config.php" line="$config['fping'] = \"/sbin/fping\";"
   when: ansible_os_family == "RedHat" or ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+- name: Ensure services are enabled and started
+  service: "name={{ item }} state=started enabled=yes"
+  with_items: "{{ observium_services }}"
+  when: not (ansible_virtualization_type is defined and ansible_virtualization_type == "docker")
+
+- name: Docker | Manually start services
+  shell: "{{ item }}"
+  with_items:
+    - sudo -H -u mysql mysqld --initialize > /tmp/mysql_install_db.out 2>&1
+    - install -d -o mysql /var/run/mysqld
+    - cd /var/lib/mysql; /usr/bin/mysqld_safe --datadir='/var/lib/mysql' > /tmp/mysqld_safe.out 2>&1 &
+#    - /usr/sbin/httpd -DFOREGROUND > /tmp/httpd.out 2>&1 &
+    - apachectl start > /tmp/httpd.out 2>&1 &
+  ignore_errors: true
+  when: (ansible_virtualization_type is defined and ansible_virtualization_type == "docker")
 
 - name: create observium mysql db
   mysql_db: "name={{ observium_db }} state=present encoding=utf8"

@@ -39,3 +39,7 @@ apache_logdir: /var/log/httpd
 modsecurity_conf: /etc/httpd/conf.d/mod_security.conf
 modsecurity_active: /etc/httpd/modsecurity.d/activated_rules
 
+mysql_svc: mariadb
+observium_services:
+    - "{{ apache_svc }}"
+    - "{{ mysql_svc }}"

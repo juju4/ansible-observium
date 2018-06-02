@@ -6,7 +6,6 @@ observium_pkg:
     - php-cli
     - php-mysql
     - php-gd
-    - php-mcrypt
     - php-json
     - php-pear
     - snmp
@@ -34,3 +33,8 @@ apache_logdir: /var/log/apache2
 modsecurity_conf: /etc/modsecurity/modsecurity.conf
 modsecurity_active: /usr/share/modsecurity-crs/activated_rules
 phpenmod: phpenmod
+
+mysql_svc: mysql
+observium_services:
+    - "{{ apache_svc }}"
+    - "{{ mysql_svc }}"
