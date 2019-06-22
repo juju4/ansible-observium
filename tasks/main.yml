@@ -22,7 +22,12 @@
   file: dest="{{ observium_rootdir }}" state=directory mode=0755
 
 - name: download observium
-  get_url: url=http://www.observium.org/observium-community-latest.tar.gz dest=/opt/observium-community-latest.tar.gz mode=0644
+  get_url:
+    url: http://www.observium.org/observium-community-latest.tar.gz
+    dest: /opt/observium-community-latest.tar.gz
+    mode: '0644'
+  register: dl_result
+  until: dl_result is success
 
 ## FIXME! archive contains a dir...
 - name: extract observium
