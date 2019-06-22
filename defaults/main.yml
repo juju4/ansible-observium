@@ -15,4 +15,3 @@ observium_devicelist:
     - { d: hostname, c: public, v: v2c }
 
 observium_do_discovery: false
-

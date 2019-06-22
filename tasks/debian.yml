@@ -1,8 +1,7 @@
 ---
 
 - name: apt | observium dependencies
-  apt: name={{item}} state=present update_cache=yes
-  with_items: "{{ observium_pkg }}"
+  apt: name={{ observium_pkg }} state=present update_cache=yes
 
 - name: debian | Ensure Mysql is running and enabled on boot.
   service: name=mysql state=started enabled=yes

@@ -27,4 +27,4 @@ galaxy_info:
   - system
   - web
 dependencies:
-  - juju4.redhat-epel
+  - juju4.redhat_epel

@@ -2,6 +2,9 @@
 ## http://www.observium.org/docs/install_debian/
 ## http://www.observium.org/docs/install_rhel7/
 
+- name: Include OS family variables
+  include_vars: "{{ ansible_os_family }}.yml"
+
 - name: Include version-specific variables for Ubuntu.
   include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml"
   when: ansible_distribution == 'Ubuntu'
@@ -124,5 +127,3 @@
         cron_file=ansible_observium-poller
   notify:
     - reload cron
-
-

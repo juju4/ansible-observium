@@ -1,8 +1,7 @@
 ---
 
 - name: yum | observium dependencies install
-  yum: name={{item}} state=present update_cache=yes
-  with_items: "{{ observium_pkg }}"
+  yum: name={{ observium_pkg }} state=present update_cache=yes
 
 - name: Redhat | Ensure cron is running and enabled on boot.
   service: name="{{ cron_svc }}" state=started enabled=yes
@@ -19,4 +18,3 @@
   lineinfile: dest=/etc/httpd/conf/httpd.conf line="Listen {{ observium_vhostport }}" follow=yes backup=yes insertafter="^Listen 80"
   notify:
     - restart apache
-
