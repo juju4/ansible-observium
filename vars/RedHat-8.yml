@@ -12,7 +12,7 @@ observium_pkg:
     - python3-PyMySQL
     - rrdtool
     - subversion
-    - jwhois
+#    - jwhois
     - ipmitool
     - graphviz
     - ImageMagick
