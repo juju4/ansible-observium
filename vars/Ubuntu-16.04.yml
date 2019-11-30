@@ -3,12 +3,6 @@
 observium_pkg:
     - apache2
     - libapache2-mod-php
-    - php-cli
-    - php-mysql
-    - php-gd
-    - php-mcrypt
-    - php-json
-    - php-pear
     - snmp
     - fping
     - mysql-server
@@ -21,6 +15,14 @@ observium_pkg:
     - ipmitool
     - graphviz
     - imagemagick
+
+_observium_pkg_php:
+    - php-cli
+    - php-mysql
+    - php-gd
+    - php-mcrypt
+    - php-json
+    - php-pear
 
 nginx_conf: /etc/nginx/sites-available
 cron_svc: cron

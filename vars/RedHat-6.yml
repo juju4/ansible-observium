@@ -3,12 +3,6 @@
 observium_pkg:
     - wget
     - httpd
-    - php
-    - php-mysql
-    - php-gd
-    - php-posix
-    - php-mcrypt
-    - php-pear.noarch
     - cronie
     - net-snmp
     - net-snmp-utils
@@ -24,6 +18,14 @@ observium_pkg:
     - ImageMagick
     - php-mcrypt
     - setroubleshoot-server
+
+_observium_pkg_php:
+    - php
+    - php-mysql
+    - php-gd
+    - php-posix
+    - php-mcrypt
+    - php-pear.noarch
 
 nginx_conf: /etc/nginx/conf.d
 cron_svc: crond

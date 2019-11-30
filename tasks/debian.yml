@@ -1,7 +1,10 @@
 ---
 
 - name: apt | observium dependencies
-  apt: name={{ observium_pkg }} state=present update_cache=yes
+  apt:
+    name: "{{ observium_pkg + observium_pkg_php | default(_observium_pkg_php) }}"
+    state: present
+    update_cache: yes
   register: pkg_result
   until: pkg_result is success
 
@@ -9,6 +12,9 @@
   service: name=mysql state=started enabled=yes
 
 - name: Check apache listening interface - ports.conf
-  lineinfile: dest=/etc/apache2/ports.conf line="Listen {{ observium_vhostport }}" backup=yes
+  lineinfile:
+    dest: /etc/apache2/ports.conf
+    line: "Listen {{ observium_vhostport }}"
+    backup: yes
   notify:
     - restart apache

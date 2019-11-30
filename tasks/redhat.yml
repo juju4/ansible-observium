@@ -1,12 +1,18 @@
 ---
 
 - name: yum | observium dependencies install
-  yum: name={{ observium_pkg }} state=present update_cache=yes
+  yum:
+    name: "{{ observium_pkg + observium_pkg_php | default(_observium_pkg_php) }}"
+    state: present
+    update_cache: yes
   register: pkg_result
   until: pkg_result is success
 
 - name: Redhat | Ensure cron is running and enabled on boot.
-  service: name="{{ cron_svc }}" state=started enabled=yes
+  service:
+    name: "{{ cron_svc }}"
+    state: started
+    enabled: yes
 - name: Redhat | Ensure Mysql/Mariadb is running and enabled on boot.
   service: name=mariadb state=started enabled=yes
 - name: Redhat | Ensure HTTPD is running and enabled on boot.
@@ -16,7 +22,12 @@
   selinux: state=disabled
 
 - name: Check apache listening interface
-#  lineinfile: dest=/etc/httpd/conf/httpd.conf line="Listen {{ observium_vhostport }}" follow=yes validate='/usr/sbin/apache2ctl -f %s -t' backup=yes insertafter="^Listen 80"
-  lineinfile: dest=/etc/httpd/conf/httpd.conf line="Listen {{ observium_vhostport }}" follow=yes backup=yes insertafter="^Listen 80"
+  lineinfile:
+    dest: /etc/httpd/conf/httpd.conf
+    line: "Listen {{ observium_vhostport }}"
+    follow: yes
+    backup: yes
+    insertafter: "^Listen 80"
+#    validate: '/usr/sbin/apache2ctl -f %s -t'
   notify:
     - restart apache
