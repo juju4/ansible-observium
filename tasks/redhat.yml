@@ -23,7 +23,7 @@
 
 - name: Open firewall port
   firewalld:
-    port: {{ observium_vhostport }}/tcp
+    port: "{{ observium_vhostport }}/tcp"
     permanent: yes
     state: enabled
   
