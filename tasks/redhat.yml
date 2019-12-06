@@ -21,6 +21,12 @@
 - name: disable selinux (observium recommendation...)
   selinux: state=disabled
 
+- name: Open firewall port
+  firewalld:
+    port: {{ observium_vhostport }}/tcp
+    permanent: yes
+    state: enabled
+  
 - name: Check apache listening interface
   lineinfile:
     dest: /etc/httpd/conf/httpd.conf
