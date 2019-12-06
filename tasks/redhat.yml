@@ -13,8 +13,6 @@
     description: Remi's PHP 7.2 RPM repository for Enterprise Linux $releasever - $basearch
     mirrorlist: http://rpms.remirepo.net/enterprise/$releasever/php72/mirror
     enabled: yes
-    gpgcheck: 1
-    gpgkey: http://rpms.remirepo.net/RPM-GPG-KEY-remi
   
 - name: yum | observium dependencies install
   yum:
