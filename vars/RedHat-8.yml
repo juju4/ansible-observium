@@ -17,6 +17,7 @@ observium_pkg:
     - graphviz
     - ImageMagick
     - setroubleshoot-server
+    - python3-libselinux
     - selinux-policy
 
 _observium_pkg_php:
