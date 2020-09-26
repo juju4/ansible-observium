@@ -25,7 +25,6 @@
   lineinfile:
     dest: /etc/httpd/conf/httpd.conf
     line: "Listen {{ observium_vhostport }}"
-    follow: yes
     backup: yes
     insertafter: "^Listen 80"
 #    validate: '/usr/sbin/apache2ctl -f %s -t'
