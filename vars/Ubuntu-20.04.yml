@@ -15,6 +15,7 @@ observium_pkg:
     - ipmitool
     - graphviz
     - imagemagick
+    - cron
 
 _observium_pkg_php:
     - php-cli
