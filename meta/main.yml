@@ -19,6 +19,7 @@ galaxy_info:
     - trusty
     - xenial
     - bionic
+    - focal
   #
   # Below are all categories currently available. Just as with
   # the platforms above, uncomment those that apply to your role.

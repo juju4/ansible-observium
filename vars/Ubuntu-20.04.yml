@@ -1,0 +1,42 @@
+---
+
+observium_pkg:
+    - apache2
+    - libapache2-mod-php
+    - snmp
+    - fping
+    - mysql-server
+    - mysql-client
+    - python-mysqldb
+    - rrdtool
+    - subversion
+    - whois
+    - mtr-tiny
+    - ipmitool
+    - graphviz
+    - imagemagick
+
+_observium_pkg_php:
+    - php-cli
+    - php-mysql
+    - php-gd
+    - php-json
+    - php-pear
+
+nginx_conf: /etc/nginx/sites-available
+cron_svc: cron
+
+www_user: www-data
+apache_svc: apache2
+apache_confdir: /etc/apache2/conf-available
+apache_sitedir: /etc/apache2/sites-available
+apachesslconf: /etc/apache2/sites-enabled/default-ssl.conf
+apache_logdir: /var/log/apache2
+modsecurity_conf: /etc/modsecurity/modsecurity.conf
+modsecurity_active: /usr/share/modsecurity-crs/activated_rules
+phpenmod: phpenmod
+
+mysql_svc: mysql
+observium_services:
+    - "{{ apache_svc }}"
+    - "{{ mysql_svc }}"
